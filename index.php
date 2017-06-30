@@ -9,18 +9,38 @@
   </head>
 
   <body>
-    <p>
 
-    </p>
-    <?php include'header.php';
+    <?php 
+    
+    include'header.php';
+    
+    
+    //si dans l'url il y a écrit (ce qu'il y a mis dans le case après un ?) il inclut la page demandée.
     switch ($_SERVER['QUERY_STRING']) {
-      case 'upload':
+    case '':
+      include'main.php';
+        break;
+    case 'upload':
       include "add_film.php";
         break;
-
-      default:
-        include'main.php';
+        
+    case 'genre':
+      include "genre.php";
         break;
+    
+    case 'connexion':
+      include "connexion.php";
+        break;
+    
+    case 'inscription':
+      include "inscription.php";
+        break;
+    
+    case 'modifier='.$_GET['modifier']  :
+      include "modifier.php";
+        break;
+ 
+
     }
     include'footer.php';
      ?>

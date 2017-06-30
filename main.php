@@ -1,25 +1,18 @@
 <main>
-<nav class="nav">
-  <fieldset>genre
-    <option value="">Comédie</option>
-    <option value="">Drame</option>
-    <option value="">Science-fiction</option>
-  </fieldset>
 
-  <a href="index.php?upload" class="add_film">+</a>
-</nav>
 
 
 <?php
 try
 {
-    $bdd = new PDO('mysql:host=localhost;dbname=afpa-bay;charset=utf8', 'root', 'mcueff123');
-    $reponse = $bdd->query('SELECT * FROM film');
+    include "connexion_bdd.php";
+    $reponse = $bdd->query('SELECT * FROM film INNER JOIN genre ON film.genre_id = genre.id');
     //moteur de recherche
     if(isset($_GET['input_search']) AND !empty($_GET['input_search'])){
       $input_search = htmlspecialchars($_GET['input_search']);
       $reponse = $bdd->query('SELECT * FROM film WHERE titre LIKE "%'.$input_search.'%"');
     }
+
     while ($donnees = $reponse->fetch())
     {
 
@@ -30,10 +23,20 @@ try
          <p class="titre_film"> <?php echo $donnees['titre']; ?></p>
          <p class="auteur_film">Auteur: <?php echo $donnees['auteur']; ?></p>
          <p class="annee_film">Date de sortie: <?php echo $donnees['date_sortie']; ?></p>
+         <p>Genre: <?php echo $donnees['name']; ?> </p>
+         <a href="?supprimer=<?php echo $donnees['id_film']; ?>"><p>Supprimer le film</p></a>
+         <a href="?modifier=<?php echo $donnees['id_film']; ?>"><p>Modifier la fiche du film</p></a>
         </div>
        </div>
        <?php
+      
     }
+    if (isset($_GET['supprimer'])){
+           include "connexion_bdd.php";
+           $genre_id = $_GET['supprimer'];
+           $reponse = $bdd->query('DELETE FROM film WHERE id_film = '.$genre_id.' ');
+           }
+    
 
 
 }catch (Exception $e)
